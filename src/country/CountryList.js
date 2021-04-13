@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar.js';
 import { Link } from 'react-router-dom';
 
 
@@ -44,12 +44,17 @@ class CountryList extends Component {
 
         const countriesList = countries.map(country => {
             return <tr key={country.id}>
-              <td style={{whiteSpace: 'nowrap'}}>{country.countryName}</td>
+              <td style={{whiteSpace: 'nowrap'}}>
+                {country.countryName}
+              </td>
               <td>
-                <ButtonGroup>
-                  <Button size="sm" color="primary" tag={Link} to={"/country/" + country.id}>Edit</Button>
-                  <Button size="sm" color="danger" onClick={() => this.remove(country.id)}>Delete</Button>
-                </ButtonGroup>
+                <Button variant="contained" color="primary" tag={Link} to={"/country/" + country.id}
+                  style={{marginRight: 10}}>
+                  Edit
+                </Button>
+                <Button variant="contained" color="danger"  onClick={() => this.remove(country.id)}>
+                   Delete
+                </Button>
               </td>
             </tr>
         });
@@ -64,13 +69,13 @@ class CountryList extends Component {
                 <h3>Country List</h3>
                 <Table className="mt-4">
                   <thead>
-                  <tr>
-                    <th width="40%">Name</th>
-                    <th width="20%">Actions</th>
-                  </tr>
+                    <tr>
+                      <th width="40%">Name</th>
+                      <th width="20%">Actions</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  {countriesList}
+                    {countriesList}
                   </tbody>
                 </Table>
               </Container>

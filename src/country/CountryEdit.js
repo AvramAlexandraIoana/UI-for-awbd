@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar.js';
 
 class CountryEdit extends Component {
 
@@ -51,7 +51,7 @@ class CountryEdit extends Component {
 
   render() {
     const {item} = this.state;
-    const title = <h2>{item.id ? 'Edit Group' : 'Add Group'}</h2>;
+    const title = <h2>{item.id ? 'Edit Country' : 'Add Country'}</h2>;
 
     return <div>
       <AppNavbar/>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -25,7 +25,7 @@ class LocationEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const location = await (await fetch(`/country/${this.props.match.params.id}`)).json();
+      const location = await (await fetch(`/location/${this.props.match.params.id}`)).json();
       this.setState({item: location});
     }
 
@@ -68,7 +68,7 @@ class LocationEdit extends Component {
 
   render() {
     const {item} = this.state;
-    const title = <h2>{item.id ? 'Edit Group' : 'Add Group'}</h2>;
+    const title = <h2>{item.id ? 'Edit Location' : 'Add Location'}</h2>;
     const countryList = this.state.countryList;
     return <div>
       <AppNavbar/>
@@ -113,6 +113,7 @@ class LocationEdit extends Component {
             </FormGroup>
             <FormGroup>
                 <Autocomplete
+                    value={item.country || '' }
                     options={countryList}
                     getOptionLabel={(option) => option.countryName}
                     fullWidth
