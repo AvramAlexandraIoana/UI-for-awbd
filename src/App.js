@@ -7,6 +7,9 @@ import CountryEdit from './country/CountryEdit';
 import LocationEdit from './location/LocationEdit';
 import LocationList from './location/LocationList';
 import AgencyEdit from './agency/AgencyEdit';
+import AgencyList from './agency/AgencyList';
+import TripList from './trip/TripList';
+import TripEdit from './trip/TripEdit';
 
 class App extends Component {
   render() {
@@ -18,7 +21,10 @@ class App extends Component {
           <Route path='/country/:id' component={CountryEdit}/>
           <Route path='/location/list' exact={true} component={LocationList}/>
           <Route path='/location/:id' component={LocationEdit}/>
+          <Route path='/agency/list' exact={true} component={AgencyList}/>
           <Route path='/agency/:id' component={AgencyEdit}/>
+          <Route path='/trip/list' exact={true} component={TripList}/>
+          <Route path='/trip/:id' component={TripEdit}/>
         </Switch>
       </Router>
     )

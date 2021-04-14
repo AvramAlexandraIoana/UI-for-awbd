@@ -63,7 +63,7 @@ class LocationEdit extends Component {
       },
       body: JSON.stringify(item),
     });
-    this.props.history.push('/locations');
+    this.props.history.push('/location/list');
   }
 
   render() {

@@ -46,7 +46,7 @@ class CountryEdit extends Component {
       },
       body: JSON.stringify(item),
     });
-    this.props.history.push('/countries');
+    this.props.history.push('/country/list');
   }
 
   render() {
