@@ -1,34 +1,149 @@
-import React, { Component } from 'react';
-import './App.css';
-import Home from './Home';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import CountryList from './country/CountryList';
-import CountryEdit from './country/CountryEdit';
-import LocationEdit from './location/LocationEdit';
-import LocationList from './location/LocationList';
-import AgencyEdit from './agency/AgencyEdit';
-import AgencyList from './agency/AgencyList';
-import TripList from './trip/TripList';
-import TripEdit from './trip/TripEdit';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Router, Switch, Route, Link } from "react-router-dom";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+
+import Login from "./components/login.component";
+import Register from "./components/register.component";
+import Home from "./components/home.component";
+import Profile from "./components/profile.component";
+import BoardUser from "./components/board-user.component";
+import BoardAdmin from "./components/board-admin.component";
+
+import { logout } from "./actions/auth";
+import { clearMessage } from "./actions/message";
+
+import { history } from './helpers/history';
+import jwt_decode from "jwt-decode";
+
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.logOut = this.logOut.bind(this);
+
+    this.state = {
+      showModeratorBoard: false,
+      showAdminBoard: false,
+      currentUser: undefined,
+    };
+
+    history.listen((location) => {
+      props.dispatch(clearMessage()); // clear message when changing location
+    });
+  }
+
+  componentDidMount() {
+    const user = this.props.user;
+
+    if (user) {
+      const decodeUser  = jwt_decode(user.accessToken);
+      this.setState({
+        currentUser: decodeUser,
+        showAdminBoard: decodeUser.roles.includes("ROLE_ADMIN")
+      });
+    }
+  }
+
+  logOut() {
+    this.props.dispatch(logout());
+  }
+
   render() {
+    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+
     return (
-      <Router>
-        <Switch>
-          <Route path='/' exact={true} component={Home}/>
-          <Route path='/country/list' exact={true} component={CountryList}/>
-          <Route path='/country/:id' component={CountryEdit}/>
-          <Route path='/location/list' exact={true} component={LocationList}/>
-          <Route path='/location/:id' component={LocationEdit}/>
-          <Route path='/agency/list' exact={true} component={AgencyList}/>
-          <Route path='/agency/:id' component={AgencyEdit}/>
-          <Route path='/trip/list' exact={true} component={TripList}/>
-          <Route path='/trip/:id' component={TripEdit}/>
-        </Switch>
+      <Router history={history}>
+        <div>
+          <nav className="navbar navbar-expand navbar-dark bg-dark">
+            <Link to={"/"} className="navbar-brand">
+              bezKoder
+            </Link>
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to={"/home"} className="nav-link">
+                  Home
+                </Link>
+              </li>
+
+              {showModeratorBoard && (
+                <li className="nav-item">
+                  <Link to={"/mod"} className="nav-link">
+                    Moderator Board
+                  </Link>
+                </li>
+              )}
+
+              {showAdminBoard && (
+                <li className="nav-item">
+                  <Link to={"/admin"} className="nav-link">
+                    Admin Board
+                  </Link>
+                </li>
+              )}
+
+              {currentUser && (
+                <li className="nav-item">
+                  <Link to={"/user"} className="nav-link">
+                    User
+                  </Link>
+                </li>
+              )}
+            </div>
+
+            {currentUser ? (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/profile"} className="nav-link">
+                    {currentUser.username}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a href="/login" className="nav-link" onClick={this.logOut}>
+                    LogOut
+                  </a>
+                </li>
+              </div>
+            ) : (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/login"} className="nav-link">
+                    Login
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link to={"/register"} className="nav-link">
+                    Sign Up
+                  </Link>
+                </li>
+              </div>
+            )}
+          </nav>
+
+          <div className="container mt-3">
+            <Switch>
+              <Route exact path={["/", "/home"]} component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/profile" component={Profile} />
+              <Route path="/user" component={BoardUser} />
+              <Route path="/admin" component={BoardAdmin} />
+            </Switch>
+          </div>
+        </div>
       </Router>
-    )
+    );
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+
+export default connect(mapStateToProps)(App);
