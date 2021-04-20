@@ -17,6 +17,8 @@ import { clearMessage } from "./actions/message";
 
 import { history } from './helpers/history';
 import jwt_decode from "jwt-decode";
+import CountryList from "./components/country-list-user.component";
+import CountryEdit from "./components/country-edit-admin.component";
 
 
 class App extends Component {
@@ -84,6 +86,14 @@ class App extends Component {
                 </li>
               )}
 
+  	          {currentUser && (
+                <li className="nav-item">
+                  <Link to={"/country/list"} className="nav-link">
+                    Country List
+                  </Link>
+                </li>
+              )}
+
               {currentUser && (
                 <li className="nav-item">
                   <Link to={"/user"} className="nav-link">
@@ -131,6 +141,9 @@ class App extends Component {
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
               <Route path="/admin" component={BoardAdmin} />
+              <Route path="/country/list" component={CountryList} />
+              <Route path="/country/:id" component={CountryEdit} />
+
             </Switch>
           </div>
         </div>
