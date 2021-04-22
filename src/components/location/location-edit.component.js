@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import CountryService from '../../services/country.service';
+import LocationService from '../../services/location.service';
 
 class LocationEdit extends Component {
 
@@ -16,7 +18,8 @@ class LocationEdit extends Component {
     super(props);
     this.state = {
       item: this.emptyItem,
-      countryList: []
+      countryList: [],
+      contentError: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,14 +27,38 @@ class LocationEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const location = await (await fetch(`/location/${this.props.match.params.id}`)).json();
-      this.setState({item: location});
+      LocationService.getLocation(this.props.match.params.id).then(
+        response => {
+          this.setState({item: response.data});
+        },
+        error => {
+          this.setState({
+            contentError:
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString()
+          });
+        }
+      )
     }
 
-    const countryList = await (await fetch(`/country/list`)).json();
-    const location = {...this.state.countryList};
-    location.countryList = countryList;
-    this.setState({countryList});
+    CountryService.getCountryList().then(
+      response => {
+        this.setState({countryList: response.data});
+      },
+      error => {
+        this.setState({
+          contentError:
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString()
+        });
+      }
+    )
     console.log(this.state);
   }
 
@@ -53,16 +80,40 @@ class LocationEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const {item} = this.state;
+    if (!item.id) {
+      LocationService.createNewLocationAdmin(item).then(
+        response => {
+          this.props.history.push('/location/list');
+        },
+        error => {
+          this.setState({
+            contentError:
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString()
+          });
+        }
+      )
+    } else {
+      LocationService.updateLocationAdmin(item).then(
+        response => {
+          this.props.history.push('/location/list');
+        },
+        error => {
+          this.setState({
+            contentError:
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString()
+          });
+        }
+      )
+    }
 
-    await fetch('/location' + (item.id ? '/' + item.id : ''), {
-      method: (item.id) ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(item),
-    });
-    this.props.history.push('/location/list');
   }
 
   render() {

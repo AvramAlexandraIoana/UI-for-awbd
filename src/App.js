@@ -17,8 +17,12 @@ import { clearMessage } from "./actions/message";
 
 import { history } from './helpers/history';
 import jwt_decode from "jwt-decode";
-import CountryList from "./components/country/country-list-user.component";
-import CountryEdit from "./components/country/country-edit-admin.component";
+import CountryList from "./components/country/country-list.component";
+import CountryEdit from "./components/country/country-edit.component";
+import LocationList from "./components/location/location-list.component";
+import LocationEdit from "./components/location/location-edit.component";
+import AgencyList from "./components/agency/agency-list.component";
+import AgencyEdit from "./components/agency/agency-edit.component";
 
 
 class App extends Component {
@@ -96,6 +100,22 @@ class App extends Component {
 
               {currentUser && (
                 <li className="nav-item">
+                  <Link to={"/location/list"} className="nav-link">
+                    Location List
+                  </Link>
+                </li>
+              )}
+
+              {currentUser && (
+                <li className="nav-item">
+                  <Link to={"/agency/list"} className="nav-link">
+                    Agency List
+                  </Link>
+                </li>
+              )}
+
+              {currentUser && (
+                <li className="nav-item">
                   <Link to={"/user"} className="nav-link">
                     User
                   </Link>
@@ -143,7 +163,10 @@ class App extends Component {
               <Route path="/admin" component={BoardAdmin} />
               <Route path="/country/list" component={CountryList} />
               <Route path="/country/:id" component={CountryEdit} />
-
+              <Route path="/location/list" component={LocationList} />
+              <Route path="/location/:id" component={LocationEdit} />
+              <Route path="/agency/list" component={AgencyList} />
+              <Route path="/agency/:id" component={AgencyEdit} />
             </Switch>
           </div>
         </div>

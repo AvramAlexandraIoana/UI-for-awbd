@@ -12,7 +12,8 @@ class CountryEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      item: this.emptyItem
+      item: this.emptyItem,
+      contentError: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,7 +27,7 @@ class CountryEdit extends Component {
         },
         error => {
           this.setState({
-            content:
+            contentError:
               (error.response &&
                 error.response.data &&
                 error.response.data.message) ||

@@ -9,6 +9,7 @@ class CountryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+          contentError: null,
           countries: [],
           isLoading: true,
           userRoles: []
@@ -33,7 +34,7 @@ class CountryList extends Component {
         },
         error => {
           this.setState({
-            content:
+            contentError:
               (error.response &&
                 error.response.data &&
                 error.response.data.message) ||
