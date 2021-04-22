@@ -17,8 +17,8 @@ import { clearMessage } from "./actions/message";
 
 import { history } from './helpers/history';
 import jwt_decode from "jwt-decode";
-import CountryList from "./components/country-list-user.component";
-import CountryEdit from "./components/country-edit-admin.component";
+import CountryList from "./components/country/country-list-user.component";
+import CountryEdit from "./components/country/country-edit-admin.component";
 
 
 class App extends Component {

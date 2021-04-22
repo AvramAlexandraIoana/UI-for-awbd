@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from '../AppNavbar';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -71,7 +70,6 @@ class LocationEdit extends Component {
     const title = <h2>{item.id ? 'Edit Location' : 'Add Location'}</h2>;
     const countryList = this.state.countryList;
     return <div>
-      <AppNavbar/>
       <Container>
         {title}
         <Form onSubmit={this.handleSubmit}>

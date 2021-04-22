@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavbar from '../AppNavbar.js';
 import { Link } from 'react-router-dom';
-import CountryService from "../services/country.service";
+import CountryService from "../../services/country.service";
 import jwt_decode from "jwt-decode";
 
 

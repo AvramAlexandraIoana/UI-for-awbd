@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from '../AppNavbar.js';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -69,7 +68,6 @@ class AgencyEdit extends Component {
         const title = <h2>{item.id ? 'Edit Agency' : 'Add Agency'}</h2>;
     
         return <div>
-          <AppNavbar/>
           <Container>
             {title}
             <Form onSubmit={this.handleSubmit}>

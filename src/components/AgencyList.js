@@ -1,6 +1,5 @@
 import { Component } from "react"
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavbar from '../AppNavbar.js';
 import { Link } from 'react-router-dom';
 
 
@@ -67,8 +66,6 @@ class AgencyList extends Component {
         }
 
         return <div>
-            <AppNavbar>
-            </AppNavbar>
             <Container fluid>
                 <div  className="float-right">
                     <Button color="success" tag={Link} to="/agency/new">Add new agency</Button>

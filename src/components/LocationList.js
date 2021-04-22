@@ -1,9 +1,7 @@
 
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavbar from '../AppNavbar.js';
 import { Link } from 'react-router-dom';
-import App from '../App.js';
 
 class LocationList extends Component {
     constructor(props) {
@@ -70,8 +68,6 @@ class LocationList extends Component {
 
     
         return <div>
-            <AppNavbar>
-            </AppNavbar>
             <Container fluid>
                 <div  className="float-right">
                     <Button color="success" tag={Link} to="/location/new">Add new location</Button>

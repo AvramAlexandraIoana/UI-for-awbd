@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import CountryService from "../services/country.service";
+import CountryService from "../../services/country.service";
 
 class CountryEdit extends Component {
 
