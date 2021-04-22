@@ -35,7 +35,6 @@ class UserService {
 
   updateCountryAdmin(data) {
     return axios.put(API_COUNTRY + '/' + data.id, data, { headers: authHeader() });
-
   }
 }
 
