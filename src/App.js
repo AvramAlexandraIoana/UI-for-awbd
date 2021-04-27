@@ -23,6 +23,8 @@ import LocationList from "./components/location/location-list.component";
 import LocationEdit from "./components/location/location-edit.component";
 import AgencyList from "./components/agency/agency-list.component";
 import AgencyEdit from "./components/agency/agency-edit.component";
+import TripList from "./components/trip/trip-list.component";
+import TripEdit from "./components/trip/trip-edit.component";
 
 
 class App extends Component {
@@ -116,6 +118,14 @@ class App extends Component {
 
               {currentUser && (
                 <li className="nav-item">
+                  <Link to={"/trip/list"} className="nav-link">
+                    Trip List
+                  </Link>
+                </li>
+              )}
+
+              {currentUser && (
+                <li className="nav-item">
                   <Link to={"/user"} className="nav-link">
                     User
                   </Link>
@@ -167,6 +177,9 @@ class App extends Component {
               <Route path="/location/:id" component={LocationEdit} />
               <Route path="/agency/list" component={AgencyList} />
               <Route path="/agency/:id" component={AgencyEdit} />
+              <Route path="/trip/list" component={TripList} />
+              <Route path="/trip/:id" component={TripEdit} />
+
             </Switch>
           </div>
         </div>

@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import { Component } from "react";
+import AgencyService from "../../services/agency.service";
+import TripService from "../../services/trip.service";
 import { Link, withRouter } from 'react-router-dom';
+import LocationService from "../../services/location.service";
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -11,8 +14,8 @@ class TripEdit extends Component {
         price: '',
         location: '',
         agency: ''
-      };
-    
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,22 +23,61 @@ class TripEdit extends Component {
             agencyList: [],
             locationList: []
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+       this.handleChange = this.handleChange.bind(this);
+       this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     async componentDidMount() {
         if (this.props.match.params.id !== 'new') {
-          const location = await (await fetch(`/trip/${this.props.match.params.id}`)).json();
-          this.setState({item: location});
+          TripService.getTrip(this.props.match.params.id).then(
+            response => {
+              this.setState({item: response.data});
+            },
+            error => {
+              this.setState({
+                contentError:
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString()
+              });
+            }
+          );
         }
-    
-        const agencyList = await (await fetch(`/agency/list`)).json();
-        const locationList = await (await fetch(`/location/list`)).json();
-        this.setState({locationList, agencyList});
-        console.log(this.state);
+
+        LocationService.getLocationList().then(
+            response => {
+                this.setState({locationList: response.data});
+            },
+            error => {
+                this.setState({
+                    contentError:
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString()
+                });
+            }
+        )
+        AgencyService.getAgencyList().then(
+            response => {
+                this.setState({agencyList: response.data});
+              },
+            error => {
+                this.setState({
+                    contentError:
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString()
+                });
+            }
+        );
     }
-    
+
     handleChange(event) {
         const target = event.target;
         const value = target.value;
@@ -48,18 +90,41 @@ class TripEdit extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         const {item} = this.state;
-    
-        await fetch('/trip' + (item.id ? '/' + item.id : ''), {
-          method: (item.id) ? 'PUT' : 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(item),
-        });
-        this.props.history.push('/trip/list');
-    }  
-
+        if (!item.id) {
+            TripService.createNewTrip(item).then(
+                response => {
+                this.props.history.push('/trip/list');
+                },
+                error => {
+                this.setState({
+                    contentError:
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString()
+                });
+            }
+          )
+        } else {
+            TripService.updateTrip(item).then(
+                response => {
+                this.props.history.push('/trip/list');
+                },
+                error => {
+                this.setState({
+                    contentError:
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString()
+                }
+            );
+            }
+          )
+        }
+    }
 
     setLocation(value) {
         let item = { ...this.state.item};
@@ -169,7 +234,8 @@ class TripEdit extends Component {
           
         </div>
     }
-
 }
+
+
 
 export default withRouter(TripEdit);
