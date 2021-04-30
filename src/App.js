@@ -25,6 +25,7 @@ import AgencyList from "./components/agency/agency-list.component";
 import AgencyEdit from "./components/agency/agency-edit.component";
 import TripList from "./components/trip/trip-list.component";
 import TripEdit from "./components/trip/trip-edit.component";
+import InfoEdit from "./components/info/info-edit.component";
 
 
 class App extends Component {
@@ -179,6 +180,7 @@ class App extends Component {
               <Route path="/agency/:id" component={AgencyEdit} />
               <Route path="/trip/list" component={TripList} />
               <Route path="/trip/:id" component={TripEdit} />
+              <Route path="/info/:id" component={InfoEdit} />
 
             </Switch>
           </div>

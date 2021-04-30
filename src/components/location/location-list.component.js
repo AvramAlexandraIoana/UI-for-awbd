@@ -96,6 +96,11 @@ class LocationList extends Component {
                         </Button>
                     </td>
                 )}
+                { userRoles.includes("ROLE_USER") && (
+                    <Button variant="info" color="info"  tag={Link} to={"/location/info/" + location.id}>
+                        Info
+                    </Button>
+                )}
             </tr>
         });
 
