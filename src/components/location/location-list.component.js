@@ -91,15 +91,14 @@ class LocationList extends Component {
                             style={{marginRight: 10}}>
                             Delete
                         </Button>
-                        <Button variant="info" color="info"  tag={Link} to={"/location/info/" + location.id}>
-                            Info
-                        </Button>
                     </td>
                 )}
                 { userRoles.includes("ROLE_USER") && (
-                    <Button variant="info" color="info"  tag={Link} to={"/location/info/" + location.id}>
-                        Info
-                    </Button>
+                    <td>
+                        <Button variant="info" color="info"  tag={Link} to={"/list/location/info/" + location.id}>
+                            Info
+                        </Button>
+                    </td>
                 )}
             </tr>
         });
