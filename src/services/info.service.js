@@ -9,13 +9,16 @@ class InfoService {
 
     // formData.append("file", item.file);
 
-    return axios.post(API_INFO + '/upload', item.imageData, { headers: authHeader()  });
+    return axios.post(API_INFO + '/upload/' + item.id + '/' + item.description, item.imageData, { headers: authHeader()  });
   }
 
 
-  getInfo(id) {
-    return axios.get(API_INFO + '/location/getImage/' + id, { headers: authHeader() + 'responseType: blob'});
+  getImage(id) {
+    return axios.get(API_INFO + '/location/getImage/' + id, { headers: authHeader()});
+  }
 
+  getInfo(id) {
+    return axios.get(API_INFO + '/' + id, { headers: authHeader() });
   }
 }
 

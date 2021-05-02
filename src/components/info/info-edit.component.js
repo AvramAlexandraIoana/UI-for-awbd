@@ -16,6 +16,7 @@ import InfoService from "../../services/info.service";
 import {  Form } from 'reactstrap';
 
 import Resizer from "react-image-file-resizer";
+const SERVE_URL = 'http://localhost:8080/api/info/location/getImage/';
 
 
 
@@ -25,7 +26,8 @@ class InfoEdit extends Component {
         imageData: null,
         imageName: null,
         image: null,
-        description: ''
+        description: '',
+        id: null
     }
 
     constructor(props) {
@@ -39,6 +41,28 @@ class InfoEdit extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
     }
+
+    async componentDidMount() {
+        if (this.props.match.params.id !== 'new') {
+          InfoService.getInfo(this.props.match.params.id).then(
+            response => {
+              this.setState({item: response.data});
+            },
+            error => {
+              this.setState({
+                contentError:
+                  (error.response &&
+                    error.response.data &&
+                    error.response.data.message) ||
+                  error.message ||
+                  error.toString()
+              });
+            }
+          )
+        }
+           
+    }
+    
 
     handleUploadClick(event) {
         let file = event.target.files[0];
@@ -68,6 +92,7 @@ class InfoEdit extends Component {
         const {item} = this.state;
         InfoService.upload(item).then(
         response => {
+            this.props.history.push('/location/list');
         },
         error => {
             this.setState({
@@ -88,26 +113,62 @@ class InfoEdit extends Component {
             <Container maxWidth="lg">
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <Card>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    image={
-                                        item.imagePreview !== null ?
-                                            item.imagePreview :
-                                            "https://th.bing.com/th/id/Rc910111ff6eb2721d4aec15e8f10f0bd?rik=uEaFcYINVsKVbg&pid=ImgRaw"}
-                                />
-                            </CardActionArea>
-                        </Card>
+                        {
+                            item.imagePreview && (
+                                <Card>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            style={{height: '500px'}}
+                                            component="img"
+                                            image={
+                                                item.imagePreview !== null ?
+                                                    item.imagePreview :
+                                                    "https://th.bing.com/th/id/Rc910111ff6eb2721d4aec15e8f10f0bd?rik=uEaFcYINVsKVbg&pid=ImgRaw"}
+                                        />
+                                    </CardActionArea>
+                                </Card>
+                            )
+                        }
+
+                        {
+                            !item.imagePreview && (
+                                <Card>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            style={{height: '500px'}}
+                                            component="img"
+                                            image={`${SERVE_URL}${this.props.match.params.id}`}
+                                        />
+                                    </CardActionArea>
+                                </Card>
+                            )
+                        }
+                       
                         <Form onSubmit={this.handleSubmit}>
-                            <input
-                                accept="image/*"
-                                id="upload-profile-image"
-                                type="file"
-                                onChange={this.handleUploadClick}
-                            />
+                            {
+                                !item.id && (
+                                    <input
+                                        accept="image/*"
+                                        id="upload-profile-image"
+                                        type="file"
+                                        onChange={this.handleUploadClick}
+                                    />
+                                )
+                            }
+                            {
+                                item.id && (
+                                    <input
+                                        style={{visibility: 'hidden' }} 
+                                        accept="image/*"
+                                        id="upload-profile-image"
+                                        type="file"
+                                        onChange={this.handleUploadClick}
+                                    />
+                                )
+                            }
                             <label htmlFor="upload-profile-image">
                                 <Button
+                                    style={{marginBottom: '10px'}}
                                     variant="contained"
                                     color="primary"
                                     component="span"
@@ -128,11 +189,16 @@ class InfoEdit extends Component {
                                 variant="contained"
                                 color="primary"
                                 type="submit"
+                                style={{marginTop: '10px'}}
                             >
-                                Upload Image
+                                { item.id ? ' Change Location Info': 'Add Location Info' }
                             </Button>
                         </Form>
-                        <Typography>{item.imageName === null ? "Select An Image To Upload" : "Image Uploaded. Saved as " + item.imageName}</Typography>
+                        {
+                            !item.id && (
+                                <Typography>{item.imageName === null ? "Select An Image To Upload" : "Image Uploaded. Saved as " + item.imageName}</Typography>
+                            )   
+                        }
                     </Grid>
                 </Grid>
             </Container>
