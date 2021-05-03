@@ -18,7 +18,7 @@ class CountryService {
   }
 
   updateCountryAdmin(data) {
-    return axios.put(API_COUNTRY + '/' + data.id, data, { headers: authHeader() });
+    return axios.put(API_COUNTRY + '/update', data, { headers: authHeader() });
   }
 
   deleteCountry(id) {

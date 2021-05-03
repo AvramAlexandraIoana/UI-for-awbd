@@ -19,7 +19,7 @@ const required = (value) => {
 class CountryEdit extends Component {
 
   emptyItem = {
-    countryName: '',
+    countryName: null,
   };
 
   constructor(props) {
@@ -71,14 +71,15 @@ class CountryEdit extends Component {
           this.props.history.push('/country/list');
         },
         error => {
-          this.setState({
-            contentError:
-              (error.response &&
-                error.response.data &&
-                error.response.data.errors) ||
-              error.errors ||
-              error.toString()
-          });
+          if (error.response.data) {
+            let {contentError} = this.state;
+            contentError = '';
+            error.response.data.errors.map(err=> {
+              contentError += err.message + ' ';
+            });
+            this.setState({contentError});
+            toast.error(contentError);
+          }
         }
       );
     } else {
@@ -91,7 +92,7 @@ class CountryEdit extends Component {
             let {contentError} = this.state;
             contentError = '';
             error.response.data.errors.map(err=> {
-              contentError += err.message;
+              contentError += err.message + ' ';
             });
             this.setState({contentError});
             toast.error(contentError);
