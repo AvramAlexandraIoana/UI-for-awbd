@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import CountryService from "../../services/country.service";
+import TextField from '@material-ui/core/TextField';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const required = (value) => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This field is required!
+      </div>
+    );
+  }
+};
 
 class CountryEdit extends Component {
 
@@ -59,11 +72,11 @@ class CountryEdit extends Component {
         },
         error => {
           this.setState({
-            content:
+            contentError:
               (error.response &&
                 error.response.data &&
-                error.response.data.message) ||
-              error.message ||
+                error.response.data.errors) ||
+              error.errors ||
               error.toString()
           });
         }
@@ -74,27 +87,20 @@ class CountryEdit extends Component {
           this.props.history.push('/country/list');
         },
         error => {
-          this.setState({
-            content:
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString()
-          });
+          if (error.response.data) {
+            let {contentError} = this.state;
+            contentError = '';
+            error.response.data.errors.map(err=> {
+              contentError += err.message;
+            });
+            this.setState({contentError});
+            toast.error(contentError);
+          }
         }
       );
     }
 
 
-    // await fetch('/country' + (item.id ? '/' + item.id : ''), {
-    //   method: (item.id) ? 'PUT' : 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(item),
-    // });
   }
 
   render() {
@@ -105,10 +111,22 @@ class CountryEdit extends Component {
       <Container>
         {title}
         <Form onSubmit={this.handleSubmit}>
-          <FormGroup>
-            <Label for="countryName">Country Name</Label>
-            <Input type="text" name="countryName" id="countryName" value={item.countryName || ''}
-                   onChange={this.handleChange} autoComplete="Country Name"/>
+            <FormGroup>
+              <TextField
+                      id="outlined-full-width"
+                      label="Country Name"
+                      placeholder="Country Name"
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                          shrink: true,
+                      }}
+                      variant="outlined"
+                      name="countryName" 
+                      id="countryName" 
+                      value={item.countryName || ''}
+                      onChange={this.handleChange}
+              />
           </FormGroup>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
@@ -116,6 +134,8 @@ class CountryEdit extends Component {
           </FormGroup>
         </Form>
       </Container>
+      <ToastContainer />    
+
       
     </div>
   }

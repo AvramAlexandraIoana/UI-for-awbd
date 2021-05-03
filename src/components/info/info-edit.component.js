@@ -33,7 +33,8 @@ class InfoEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            item: this.emptyItem
+            item: this.emptyItem,
+            contentError: null
         };
 
         this.handleUploadClick = this.handleUploadClick.bind(this);
@@ -43,19 +44,22 @@ class InfoEdit extends Component {
     }
 
     async componentDidMount() {
+        const {item} =  this.state;
+        item.id = this.props.match.params.id;
+        this.setState({item});
         if (this.props.match.params.id !== 'new') {
           InfoService.getInfo(this.props.match.params.id).then(
             response => {
-              this.setState({item: response.data});
+                this.setState({item: response.data});
             },
             error => {
               this.setState({
                 contentError:
                   (error.response &&
                     error.response.data &&
-                    error.response.data.message) ||
-                  error.message ||
-                  error.toString()
+                    error.response.data.errors) ||
+                  error.errors ||
+                  error.errors.toString()
               });
             }
           )
@@ -90,6 +94,10 @@ class InfoEdit extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         const {item} = this.state;
+        if (!item.id) {
+            item.id = this.props.match.params.id;
+        }
+        this.setState({item});
         InfoService.upload(item).then(
         response => {
             this.props.history.push('/location/list');
@@ -108,7 +116,7 @@ class InfoEdit extends Component {
     }
 
     render() {
-        const {item} = this.state;
+        const {item, contentError} = this.state;
         return (
             <Container maxWidth="lg">
                 <Grid container spacing={2}>
@@ -146,7 +154,7 @@ class InfoEdit extends Component {
                        
                         <Form onSubmit={this.handleSubmit}>
                             {
-                                !item.id && (
+                                contentError && (
                                     <input
                                         accept="image/*"
                                         id="upload-profile-image"
@@ -156,7 +164,7 @@ class InfoEdit extends Component {
                                 )
                             }
                             {
-                                item.id && (
+                                !contentError && (
                                     <input
                                         style={{visibility: 'hidden' }} 
                                         accept="image/*"
