@@ -5,13 +5,16 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CountryService from '../../services/country.service';
 import LocationService from '../../services/location.service';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 class LocationEdit extends Component {
 
   emptyItem = {
-    city: '',
-    streetAddress: '',
-    country: ''
+    city: null,
+    streetAddress: null,
+    country: null
   };
 
   constructor(props) {
@@ -86,14 +89,15 @@ class LocationEdit extends Component {
           this.props.history.push('/location/list');
         },
         error => {
-          this.setState({
-            contentError:
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString()
-          });
+          if (error.response.data) {
+            let {contentError} = this.state;
+            contentError = '';
+            error.response.data.errors.map(err=> {
+              contentError += err.message + ' ';
+            });
+            this.setState({contentError});
+            toast.error(contentError);
+          }
         }
       )
     } else {
@@ -102,14 +106,15 @@ class LocationEdit extends Component {
           this.props.history.push('/location/list');
         },
         error => {
-          this.setState({
-            contentError:
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString()
-          });
+          if (error.response.data) {
+            let {contentError} = this.state;
+            contentError = '';
+            error.response.data.errors.map(err=> {
+              contentError += err.message + ' ';
+            });
+            this.setState({contentError});
+            toast.error(contentError);
+          }
         }
       )
     }
@@ -137,7 +142,6 @@ class LocationEdit extends Component {
                         variant="outlined"
                         name="city" 
                         id="city" 
-                        required
                         value={item.city || ''}
                         onChange={this.handleChange}
                 />
@@ -155,7 +159,6 @@ class LocationEdit extends Component {
                         variant="outlined"
                         name="streetAddress" 
                         id="streetAddress" 
-                        required
                         value={item.streetAddress || ''}
                         onChange={this.handleChange}
                 />
@@ -167,7 +170,7 @@ class LocationEdit extends Component {
                     getOptionLabel={(option) => option.countryName}
                     fullWidth
                     onChange={(event, value) =>  this.setCountry(value)}
-                    renderInput={(params) => <TextField {...params}  required
+                    renderInput={(params) => <TextField {...params}  
                                 label="Country" variant="outlined" />}
                 />
             </FormGroup>
@@ -178,7 +181,7 @@ class LocationEdit extends Component {
             </FormGroup>
         </Form>
       </Container>
-      
+      <ToastContainer />          
     </div>
   }
 }

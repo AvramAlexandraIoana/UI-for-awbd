@@ -14,7 +14,7 @@ class LocationService {
   }
 
   updateLocationAdmin(data) {
-    return axios.put(API_LOCATION + '/' + data.id, data, { headers: authHeader() });
+    return axios.put(API_LOCATION + '/update', data, { headers: authHeader() });
   }
 
   getLocation(id) {
