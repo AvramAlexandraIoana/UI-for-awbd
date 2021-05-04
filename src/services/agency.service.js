@@ -15,7 +15,7 @@ class AgencyService {
 
 
   updateAgency(data) {
-    return axios.put(API_AGENCY + '/' + data.id, data, { headers: authHeader() });
+    return axios.put(API_AGENCY + '/update', data, { headers: authHeader() });
   }
 
   getAgency(id) {

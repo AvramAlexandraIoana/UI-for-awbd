@@ -5,19 +5,22 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import LocationService from '../../services/location.service';
 import AgencyService from '../../services/agency.service';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class AgencyEdit extends Component {
     emptyItem = {
-        name: '',
-        location: {}
+        name: null,
+        location: null
     };
     
     constructor(props) {
         super(props);
         this.state = {
             item: this.emptyItem,
-            locationList: []
+            locationList: [],
+            contentError: null
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -79,14 +82,15 @@ class AgencyEdit extends Component {
                 this.props.history.push('/agency/list');
               },
               error => {
-                this.setState({
-                  contentError:
-                    (error.response &&
-                      error.response.data &&
-                      error.response.data.message) ||
-                    error.message ||
-                    error.toString()
-                });
+                if (error.response.data) {
+                  let {contentError} = this.state;
+                  contentError = '';
+                  error.response.data.errors.map(err=> {
+                    contentError += err.message + ' ';
+                  });
+                  this.setState({contentError});
+                  toast.error(contentError);
+                }
               }
             )
         } else {
@@ -95,14 +99,15 @@ class AgencyEdit extends Component {
                   this.props.history.push('/agency/list');
                 },
                 error => {
-                  this.setState({
-                    contentError:
-                      (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                      error.message ||
-                      error.toString()
-                  });
+                  if (error.response.data) {
+                    let {contentError} = this.state;
+                    contentError = '';
+                    error.response.data.errors.map(err=> {
+                      contentError += err.message + ' ';
+                    });
+                    this.setState({contentError});
+                    toast.error(contentError);
+                  }
                 }
               )
         }
@@ -137,7 +142,6 @@ class AgencyEdit extends Component {
                             variant="outlined"
                             name="name" 
                             id="name" 
-                            required
                             value={item.name || ''}
                             onChange={this.handleChange}
                     />
@@ -149,7 +153,7 @@ class AgencyEdit extends Component {
                         getOptionLabel={(option) => option.city}
                         fullWidth
                         onChange={(event, value) =>  this.setLocation(value)}
-                        renderInput={(params) => <TextField {...params}  required
+                        renderInput={(params) => <TextField {...params} 
                                     label="Location" variant="outlined" placeholder="Location" />}
                     />
                 </FormGroup>
@@ -159,7 +163,9 @@ class AgencyEdit extends Component {
                 </FormGroup>
             </Form>
           </Container>
+          <ToastContainer />          
         </div>
+
       }
 }
 
