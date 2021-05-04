@@ -10,7 +10,6 @@ import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
-import BoardAdmin from "./components/board-admin.component";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -27,6 +26,7 @@ import TripList from "./components/trip/trip-list.component";
 import TripEdit from "./components/trip/trip-edit.component";
 import InfoEdit from "./components/info/info-edit.component";
 import InfoShow from "./components/info/info-show.component";
+import UserListAdmin from "./components/user-list-admin/user-list-admin.component";
 
 
 class App extends Component {
@@ -172,7 +172,7 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
-              <Route path="/admin" component={BoardAdmin} />
+              <Route path="/admin" component={UserListAdmin} />
               <Route path="/country/list" component={CountryList} />
               <Route path="/country/:id" component={CountryEdit} />
               <Route path="/location/list" component={LocationList} />
