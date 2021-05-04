@@ -74,3 +74,12 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+
+div.react-datepicker-wrapper {
+  width: 100%;
+}
+
+ div.react-datepicker-wrapper > div > input {
+   width: 100%;
+ }
