@@ -15,7 +15,7 @@ class TripService {
 
 
   updateTrip(data) {
-    return axios.put(API_TRIP + '/' + data.id, data, { headers: authHeader() });
+    return axios.put(API_TRIP + '/update', data, { headers: authHeader() });
   }
 
   getTrip(id) {

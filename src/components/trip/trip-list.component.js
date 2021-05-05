@@ -80,10 +80,13 @@ class TripList extends Component {
                   {trip.name}
                 </td>
                 <td style={{whiteSpace: 'nowrap'}}>
-                    {trip.numberOfSpots}
+                    {trip.numberOfSeats}
                 </td>
                 <td style={{whiteSpace: 'nowrap'}}>
                     {trip.price}
+                </td>
+                <td style={{whiteSpace: 'nowrap'}}>
+                    {trip.duration}
                 </td>
                 <td style={{whiteSpace: 'nowrap'}}>
                     {trip.agency.name}
@@ -123,8 +126,9 @@ class TripList extends Component {
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Number of sports</th>
+                                <th>Number of Seats</th>
                                 <th>Price</th>
+                                <th>Duration</th>
                                 <th>Agency Name</th>
                                 <th>Location</th>
                                 { (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MANAGER')) &&

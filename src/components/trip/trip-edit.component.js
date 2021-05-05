@@ -10,18 +10,21 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import * as moment from 'moment'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 class TripEdit extends Component {
     emptyItem = {
-        name: '',
-        numberOfSpots: '',
-        price: '',
+        name: null,
+        numberOfSeats: null,
+        price: null,
+        duration: null,
         startDate: null,
         endDate: null,
-        location: '',
-        agency: ''
+        location: null,
+        agency: null
     }
 
     constructor(props) {
@@ -48,6 +51,9 @@ class TripEdit extends Component {
               item.endDate =  moment(response.data.endDate).toDate();
               item.location = response.data.location;
               item.agency = response.data.agency;
+              item.numberOfSeats = response.data.numberOfSeats;
+              item.duration = response.data.duration;
+              item.id = response.data.id;
               console.log(item);
 
             },
@@ -114,32 +120,33 @@ class TripEdit extends Component {
                 this.props.history.push('/trip/list');
                 },
                 error => {
-                this.setState({
-                    contentError:
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString()
-                });
-            }
-          )
+                    if (error.response.data) {
+                        let {contentError} = this.state;
+                        contentError = '';
+                        error.response.data.errors.map(err=> {
+                          contentError += err.message + ' ';
+                        });
+                        this.setState({contentError});
+                        toast.error(contentError);
+                    }
+                }
+            )
         } else {
             TripService.updateTrip(item).then(
                 response => {
                 this.props.history.push('/trip/list');
                 },
                 error => {
-                this.setState({
-                    contentError:
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString()
+                    if (error.response.data) {
+                        let {contentError} = this.state;
+                        contentError = '';
+                        error.response.data.errors.map(err=> {
+                          contentError += err.message + ' ';
+                        });
+                        this.setState({contentError});
+                        toast.error(contentError);
+                    }
                 }
-            );
-            }
           )
         }
     }
@@ -177,106 +184,124 @@ class TripEdit extends Component {
           <Container>
             {title}
             <Form onSubmit={this.handleSubmit}>
-               <FormGroup>
-                    <TextField
-                        id="outlined-full-width"
-                        label="Name"
-                        placeholder="Name"
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        name="name" 
-                        id="name" 
-                        value={item.name || ''}
-                        onChange={this.handleChange}
-                    />
-                </FormGroup>
                 <FormGroup>
-                    <TextField
-                        type="number"
-                        id="outlined-full-width"
-                        label="Number of Spots"
-                        placeholder="Number of Spots"
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        name="numberOfSpots" 
-                        id="numberOfSpots" 
-                        value={item.numberOfSpots || ''}
-                        onChange={this.handleChange}
-                    />
-                 </FormGroup>
-                <FormGroup>
-                    <TextField
-                        type="number"
-                        id="outlined-full-width"
-                        label="Price"
-                        placeholder="Price"
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        variant="outlined"
-                        name="price" 
-                        id="price" 
-                        value={item.price || ''}
-                        onChange={this.handleChange}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Autocomplete
-                        value={item.location}
-                        options={locationList}
-                        getOptionLabel={(option) => option.city}
-                        fullWidth
-                        onChange={(event, value) =>  this.setLocation(value)}
-                        renderInput={(params) => <TextField {...params} 
-                                    label="Location" variant="outlined" />}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Autocomplete
-                        value={item.agency}
-                        options={agencyList}
-                        getOptionLabel={(option) => option.name}
-                        fullWidth
-                        onChange={(event, value) =>  this.setAgency(value)}
-                        renderInput={(params) => <TextField {...params} 
-                                    label="Agency" variant="outlined" />}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <DatePicker 
-                        className="inputStyles"
-                        name="startDate" 
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Start Date"
-                        selected={item.startDate} 
-                        onChange={date => this.setStartDate(date)} />
-                </FormGroup>
-                <FormGroup>
-                     <DatePicker 
-                        name="endDate" 
-                        dateFormat="yyyy-MM-dd"
-                        className="inputStyles"
-                        placeholderText="End Date"
-                        selected={item.endDate} 
-                        onChange={date => this.setEndDate(date)} />
-                </FormGroup>
-                <FormGroup>
-                    <Button color="primary" type="submit">Save</Button>{' '}
-                    <Button color="secondary" tag={Link} to="/trip/list">Cancel</Button>
-                </FormGroup>
-            </Form>
-          </Container>
-          
+                        <TextField
+                            id="outlined-full-width"
+                            label="Name"
+                            placeholder="Name"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            name="name" 
+                            id="name" 
+                            value={item.name || ''}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField
+                            type="number"
+                            id="outlined-full-width"
+                            label="Number of Seats"
+                            placeholder="Number of Seats"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            name="numberOfSeats" 
+                            id="numberOfSeats" 
+                            value={item.numberOfSeats || ''}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField
+                            type="number"
+                            id="outlined-full-width"
+                            label="Price"
+                            placeholder="Price"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            name="price" 
+                            id="price" 
+                            value={item.price || ''}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <TextField
+                            type="number"
+                            id="outlined-full-width"
+                            label="Duration"
+                            placeholder="Duration"
+                            fullWidth
+                            margin="normal"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            name="duration" 
+                            id="duration" 
+                            value={item.duration || ''}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Autocomplete
+                            value={item.location}
+                            options={locationList}
+                            getOptionLabel={(option) => option.city}
+                            fullWidth
+                            onChange={(event, value) =>  this.setLocation(value)}
+                            renderInput={(params) => <TextField {...params} 
+                                        label="Location" variant="outlined" />}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Autocomplete
+                            value={item.agency}
+                            options={agencyList}
+                            getOptionLabel={(option) => option.name}
+                            fullWidth
+                            onChange={(event, value) =>  this.setAgency(value)}
+                            renderInput={(params) => <TextField {...params} 
+                                        label="Agency" variant="outlined" />}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <DatePicker 
+                            className="inputStyles"
+                            name="startDate" 
+                            dateFormat="yyyy-MM-dd"
+                            placeholderText="Start Date"
+                            selected={item.startDate} 
+                            onChange={date => this.setStartDate(date)} />
+                    </FormGroup>
+                    <FormGroup>
+                        <DatePicker 
+                            name="endDate" 
+                            dateFormat="yyyy-MM-dd"
+                            className="inputStyles"
+                            placeholderText="End Date"
+                            selected={item.endDate} 
+                            onChange={date => this.setEndDate(date)} />
+                    </FormGroup>
+                    <FormGroup>
+                        <Button color="primary" type="submit">Save</Button>{' '}
+                        <Button color="secondary" tag={Link} to="/trip/list">Cancel</Button>
+                    </FormGroup>
+                </Form>
+            </Container>
+            <ToastContainer />          
         </div>
     }
 }
