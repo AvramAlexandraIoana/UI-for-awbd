@@ -12,6 +12,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link, withRouter } from 'react-router-dom';
 import { Form} from 'reactstrap';
 import UserService from "../../services/user.service";
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import * as moment from 'moment'
 
 
 class Purchase extends Component {
@@ -21,6 +26,7 @@ class Purchase extends Component {
         super(props);
         this.state = {
             trips: [],
+            tripDetails: null,
             userTrips: [],
             open: false,
         };
@@ -139,7 +145,24 @@ class Purchase extends Component {
           );
     }
 
-    handleClickOpen() {
+    handleClickOpen(event) {
+       const index = event.target.name;
+       TripService.getTrip(parseFloat(index)).then(
+        response => {
+          this.setState({tripDetails: response.data});
+          console.log(this.state);
+        },
+        error => {
+          this.setState({
+            contentError:
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString()
+          });
+        }
+        );
        this.setState({open: true});
        console.log(this.state);
     }
@@ -151,7 +174,7 @@ class Purchase extends Component {
 
 
     render() {
-        const {trips, open} = this.state;
+        const {trips, open, tripDetails} = this.state;
         const tripList = trips.map((trip, key) => {
             return (
                 <FormGroup>
@@ -168,7 +191,7 @@ class Purchase extends Component {
                         }
                         label={trip.name}
                     />
-                    <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                    <Button name={trip.id} variant="outlined" color="primary" onClick={this.handleClickOpen}>
                         View trip details
                     </Button>
                 </FormGroup>
@@ -191,19 +214,67 @@ class Purchase extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Trip Details"}</DialogTitle>
                     <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Let Google help apps determine location. This means sending anonymous location data to
-                        Google, even when no apps are running.
+                        <Card style={{minWidth: 275 }} variant="outlined">
+                            <CardContent>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Name:
+                                    </b>
+                                    {tripDetails ? tripDetails.name : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Number of Seats:
+                                    </b>
+                                    {tripDetails ? tripDetails.numberOfSeats : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Price:
+                                    </b>
+                                    {tripDetails ? tripDetails.price : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Duration:
+                                    </b>
+                                    {tripDetails ? tripDetails.duration : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Start Date:
+                                    </b>
+                                    {tripDetails ? moment(tripDetails.startDate).format('DD/MM/YYYY') : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        End Date:
+                                    </b>
+                                    {tripDetails ? moment(tripDetails.endDate).format('DD/MM/YYYY') : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Location:
+                                    </b>
+                                    {tripDetails && tripDetails.location ? tripDetails.city : ''}
+                                </Typography>
+                                <Typography style={{fontSize: 14 }} variant="h5" component="h2">
+                                    <b>
+                                        Agency:
+                                    </b>
+                                    {tripDetails && tripDetails.agency ? tripDetails.agency.name : ''}
+                                </Typography>
+                              
+                            </CardContent>
+                        </Card>
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                        Disagree
-                    </Button>
                     <Button onClick={this.handleClose} color="primary" autoFocus>
-                        Agree
+                        Close
                     </Button>
                     </DialogActions>
                 </Dialog>
