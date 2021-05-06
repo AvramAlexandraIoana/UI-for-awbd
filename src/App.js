@@ -36,6 +36,7 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
+      id: null,
       showModeratorBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
@@ -52,6 +53,7 @@ class App extends Component {
     if (user) {
       const decodeUser  = jwt_decode(user.accessToken);
       this.setState({
+        id: decodeUser.jti,
         currentUser: decodeUser,
         showAdminBoard: decodeUser.roles.includes("ROLE_ADMIN")
       });
@@ -63,7 +65,7 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+    const { id, currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
     return (
       <Router history={history}>
@@ -137,7 +139,7 @@ class App extends Component {
 
               {currentUser && (
                 <li className="nav-item">
-                  <Link to={"/purchase"} className="nav-link">
+                  <Link to={"/purchase/" + id} className="nav-link">
                     Purchase A Trip
                   </Link>
                 </li>
@@ -192,7 +194,7 @@ class App extends Component {
               <Route path="/trip/:id" component={TripEdit} />
               <Route path="/info/:id" component={InfoEdit} />
               <Route path="/list/location/info/:id" component={InfoShow} />
-              <Route path="/purchase" component={Purchase} />
+              <Route path="/purchase/:id" component={Purchase} />
 
             </Switch>
           </div>

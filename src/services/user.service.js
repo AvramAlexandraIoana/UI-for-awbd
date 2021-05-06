@@ -30,6 +30,15 @@ class UserService {
     return axios.delete(USER_URL + '/delete/' + id, { headers: authHeader() });
   }
 
+  getUserById(id) {
+    return axios.get(USER_URL + '/' + id, { headers: authHeader() });
+  }
+
+
+  addUserTrip(id, trips) {
+    return axios.put(USER_URL + '/' + id, trips, { headers: authHeader() });
+
+  }
 }
 
 export default new UserService();

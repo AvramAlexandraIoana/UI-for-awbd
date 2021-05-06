@@ -281,7 +281,7 @@ class TripEdit extends Component {
                         <DatePicker 
                             className="inputStyles"
                             name="startDate" 
-                            dateFormat="yyyy-MM-dd"
+                            dateFormat="dd/MM/yyyy"
                             placeholderText="Start Date"
                             selected={item.startDate} 
                             onChange={date => this.setStartDate(date)} />
@@ -289,7 +289,7 @@ class TripEdit extends Component {
                     <FormGroup>
                         <DatePicker 
                             name="endDate" 
-                            dateFormat="yyyy-MM-dd"
+                            dateFormat="dd/MM/yyyy"
                             className="inputStyles"
                             placeholderText="End Date"
                             selected={item.endDate} 

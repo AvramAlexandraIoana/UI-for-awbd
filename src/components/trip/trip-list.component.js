@@ -3,6 +3,7 @@ import TripService from "../../services/trip.service";
 import jwt_decode from "jwt-decode";
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import * as moment from 'moment'
 
 
 class TripList extends Component {
@@ -86,13 +87,19 @@ class TripList extends Component {
                     {trip.price}
                 </td>
                 <td style={{whiteSpace: 'nowrap'}}>
-                    {trip.duration}
+                    {trip.duration} Days
                 </td>
                 <td style={{whiteSpace: 'nowrap'}}>
-                    {trip.agency.name}
+                    {moment(trip.startDate).format('DD/MM/YYYY')}
                 </td>
                 <td style={{whiteSpace: 'nowrap'}}>
-                    {trip.location.city}
+                    {moment(trip.endDate).format('DD/MM/YYYY')}
+                </td>
+                <td style={{whiteSpace: 'nowrap'}}>
+                    {trip.agency ? trip.agency.name : ''}
+                </td>
+                <td style={{whiteSpace: 'nowrap'}}>
+                    {trip.location ? trip.location.city : ''}
                 </td>
                 {
                     (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MANAGER')) &&
@@ -129,6 +136,8 @@ class TripList extends Component {
                                 <th>Number of Seats</th>
                                 <th>Price</th>
                                 <th>Duration</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
                                 <th>Agency Name</th>
                                 <th>Location</th>
                                 { (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_MANAGER')) &&
