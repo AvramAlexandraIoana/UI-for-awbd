@@ -9,7 +9,7 @@ export default class UserListAdmin extends Component {
     super(props);
 
     this.state = {
-      content: "",
+      contentError: "",
       userList: [],
       isLoading: true,
       userRoles: []
@@ -37,7 +37,7 @@ export default class UserListAdmin extends Component {
       },
       error => {
         this.setState({
-          content:
+          contentError:
             (error.response &&
               error.response.data &&
               error.response.data.message) ||
@@ -65,7 +65,7 @@ export default class UserListAdmin extends Component {
             });
         }
     )
-}
+  }
 
   render() {
     const {userList, isLoading, userRoles} = this.state;
