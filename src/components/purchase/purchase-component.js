@@ -130,7 +130,7 @@ class Purchase extends Component {
         }
         UserService.addUserTrip(sendObject.id, sendObject).then(
             response => {
-                this.props.history.push('/trip/list');
+                this.props.history.push('/usertrip/list/' + this.props.match.params.id);
             },
             error => {
               this.setState({
@@ -142,7 +142,7 @@ class Purchase extends Component {
                   error.toString()
               });
             }
-          );
+        );
     }
 
     handleClickOpen(event) {
