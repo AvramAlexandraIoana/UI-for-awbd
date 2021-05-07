@@ -91,19 +91,15 @@ class LocationList extends Component {
                             style={{marginRight: 10}}>
                             Delete
                         </Button>
+                        <Button variant="info" color="info"  tag={Link} to={"/info/" + location.id}>
+                           Add Location Info
+                        </Button>
                     </td>
                 )}
                 {( userRoles.includes("ROLE_USER")  && location.info && location.info.id )&& (
                     <td>
                         <Button variant="info" color="info"  tag={Link} to={"/list/location/info/" + location.id}>
                            View Location Info
-                        </Button>
-                    </td>
-                )}
-                 {( userRoles.includes("ROLE_ADMIN")  && !location.info )&& (
-                    <td>
-                        <Button variant="info" color="info"  tag={Link} to={"/info/" + location.id}>
-                           Add Location Info
                         </Button>
                     </td>
                 )}

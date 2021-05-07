@@ -30,6 +30,7 @@ import UserListAdmin from "./components/user-list-admin/user-list-admin.componen
 import Purchase from "./components/purchase/purchase-component";
 import UserTripList from "./components/user-trip/user-trip-list.component";
 import UserRoles from "./components/user-edit/user-roles.component";
+import LocationListPagination from "./components/location/location-list-pagination.component";
 
 
 class App extends Component {
@@ -207,6 +208,7 @@ class App extends Component {
               <Route path="/purchase/:id" component={Purchase} />
               <Route path="/usertrip/list/:id" component={UserTripList} />
               <Route path="/roles/:id" component={UserRoles} />
+              <Route path="/locations/pagination" component={LocationListPagination} />
 
             </Switch>
           </div>

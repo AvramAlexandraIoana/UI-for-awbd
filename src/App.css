@@ -40,11 +40,17 @@
 
 .container, .container-fluid {
   margin-top: 20px;
+  max-width: unset !important;
 }  
 
 label {
   display: block;
   margin-top: 10px;
+}
+
+
+.py-5 {
+  padding-top: unset !important;
 }
 
 .card-container.card {
@@ -84,3 +90,8 @@ div.react-datepicker-wrapper {
    width: 100%;
  }
 
+ .location-img {
+   position: relative;
+   width: 50px;
+   height: 50px;
+ }
