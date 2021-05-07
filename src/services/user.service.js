@@ -39,6 +39,11 @@ class UserService {
     return axios.put(USER_URL + '/' + id, trips, { headers: authHeader() });
 
   }
+
+  updateRoles(id, roles) {
+    return axios.put(USER_URL + '/roles/' + id, roles, { headers: authHeader() });
+
+  }
 }
 
 export default new UserService();

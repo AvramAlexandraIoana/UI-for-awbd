@@ -29,6 +29,7 @@ import InfoShow from "./components/info/info-show.component";
 import UserListAdmin from "./components/user-list-admin/user-list-admin.component";
 import Purchase from "./components/purchase/purchase-component";
 import UserTripList from "./components/user-trip/user-trip-list.component";
+import UserRoles from "./components/user-edit/user-roles.component";
 
 
 class App extends Component {
@@ -205,6 +206,7 @@ class App extends Component {
               <Route path="/list/location/info/:id" component={InfoShow} />
               <Route path="/purchase/:id" component={Purchase} />
               <Route path="/usertrip/list/:id" component={UserTripList} />
+              <Route path="/roles/:id" component={UserRoles} />
 
             </Switch>
           </div>

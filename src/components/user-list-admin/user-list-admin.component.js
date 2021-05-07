@@ -85,8 +85,18 @@ export default class UserListAdmin extends Component {
           <td style={{whiteSpace: 'nowrap'}}>
             {user.email}
           </td>
+          <td style={{whiteSpace: 'nowrap'}}>
+            {user.roles && user.roles.map((role, key2) =>
+              role.name +
+              (key2 < user.roles.length - 1 ? ', ': '')
+            )}
+          </td>
           { userRoles.includes("ROLE_ADMIN") && (
               <td>
+                 <Button variant="contained" color="info"  tag={Link} to={"/roles/" + user.id}
+                    style={{marginRight: 10}}>
+                    Edit user roles
+                  </Button>
                   <Button variant="contained" color="danger"  onClick={() => this.remove(user.id)}
                       style={{marginRight: 10}}>
                       Delete
@@ -105,6 +115,7 @@ export default class UserListAdmin extends Component {
                           <th>Name</th>
                           <th>Username</th>
                           <th>Email</th>
+                          <th>Roles</th>
                           { userRoles.includes("ROLE_ADMIN") && (
                               <th>Actions</th>
                           )}
