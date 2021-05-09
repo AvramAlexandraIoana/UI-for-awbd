@@ -38,17 +38,31 @@ class LocationListPagination extends Component {
                 error.toString()
           });
       }
-  )
+    )
   }
 
   onPageChanged = data => {
     const { allLocations } = this.state;
     const { currentPage, totalPages, pageLimit } = data;
 
-    const offset = (currentPage - 1) * pageLimit;
-    const currentLocations = allLocations.slice(offset, offset + pageLimit);
+    LocationService.findPage(currentPage).then(
+      response => {
+        console.log(this.state);
+        this.setState({ currentPage, currentLocations: response.data, totalPages });
+        console.log(this.state);
+      },
+      error => {
+          this.setState({
+              contentError:
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString()
+          });
+      }
+    )
 
-    this.setState({ currentPage, currentLocations, totalPages });
   }
 
   render() {

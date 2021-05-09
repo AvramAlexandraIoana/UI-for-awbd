@@ -26,6 +26,10 @@ class TripService {
     return axios.delete(API_TRIP + '/delete/' + id, { headers: authHeader() });
   }
 
+  findPageSortingByPriceDescending(currentPage, pageLimit) {
+    return axios.get(API_TRIP + '/page/' + currentPage + '/' + pageLimit, { headers: authHeader() });
+  }
+
 }
 
 export default new TripService();

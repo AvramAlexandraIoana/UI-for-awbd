@@ -71,6 +71,7 @@ class InfoEdit extends Component {
     handleUploadClick(event) {
         let file = event.target.files[0];
         const imageData = new FormData();
+        console.log(file);
         imageData.append('imageFile', file);
         let item = {...this.state.item};
         item.imageData = imageData;
@@ -98,6 +99,7 @@ class InfoEdit extends Component {
             item.id = this.props.match.params.id;
         }
         this.setState({item});
+        console.log(item);
         InfoService.upload(item).then(
         response => {
             this.props.history.push('/location/list');

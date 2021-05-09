@@ -118,6 +118,14 @@ class App extends Component {
 
               {currentUser && (
                 <li className="nav-item">
+                  <Link to={"/locations/pagination"} className="nav-link">
+                    Pagination 
+                  </Link>
+                </li>
+              )}
+
+              {currentUser && (
+                <li className="nav-item">
                   <Link to={"/agency/list"} className="nav-link">
                     Agency List
                   </Link>
@@ -132,13 +140,7 @@ class App extends Component {
                 </li>
               )}
 
-              {currentUser && (
-                <li className="nav-item">
-                  <Link to={"/user"} className="nav-link">
-                    User
-                  </Link>
-                </li>
-              )}
+        
 
               {currentUser && (
                 <li className="nav-item">

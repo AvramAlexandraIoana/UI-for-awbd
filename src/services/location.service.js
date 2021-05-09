@@ -25,6 +25,10 @@ class LocationService {
     return axios.delete(API_LOCATION + '/delete/' + id, { headers: authHeader() });
   }
 
+  findPage(currentPage) {
+    return axios.get(API_LOCATION + '/page/' + currentPage, { headers: authHeader() });
+  }
+
 
 
 }

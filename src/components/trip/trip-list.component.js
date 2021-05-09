@@ -16,6 +16,7 @@ class TripList extends Component {
             userRoles: []
         };
         this.remove = this.remove.bind(this);
+        this.sortDescendingByPrice = this.sortDescendingByPrice.bind(this);
     }
 
     componentDidMount() {
@@ -53,6 +54,24 @@ class TripList extends Component {
             response => {
                 let updatedTrips = [...this.state.trips].filter(i => i.id !== id);
                 this.setState({trips: updatedTrips});
+            },
+            error => {
+                this.setState({
+                    contentError:
+                      (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                      error.message ||
+                      error.toString()
+                });
+            }
+        )
+    }
+
+    async sortDescendingByPrice() {
+        TripService.findPageSortingByPriceDescending(1, this.state.trips.length).then(
+            response => {
+                this.setState({trips: response.data});
             },
             error => {
                 this.setState({
@@ -125,6 +144,15 @@ class TripList extends Component {
                         (
                             <div  className="float-right">
                                 <Button color="success" tag={Link} to="/trip/new">Add new trip</Button>
+                            </div>
+                        )
+                    }
+                        {
+                        (userRoles.includes('ROLE_USER')) &&
+                        (
+                            <div  className="float-right">
+                                <Button color="info" style={{marginRight: 10}} 
+                                    onClick={() => this.sortDescendingByPrice()}>Sort descending by price</Button>
                             </div>
                         )
                     }
